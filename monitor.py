@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import http.client
 import argparse
 import sys
+import os
 
 parser = argparse.ArgumentParser()
 
@@ -14,7 +15,18 @@ if len(sys.argv) < 2:
     parser.print_help()
     sys.exit(1)
 
-print(args.project)
+SURVEDA_URL = os.environ.get("SURVEDA_URL")
+os.environ.get("SURVEDA_USER")
+os.environ.get("SURVEDA_PASS")
+os.environ.get("SPARKPOST_KEY")
+os.environ.get("SPARKPOST_TEMPLATE_ID")
+os.environ.get("REDIS_URL")
+os.environ.get("REDIS_PASS")
+os.environ.get("REDIS_PORT")
+
+
+page = requests.get(SURVEDA_URL+'/sessions/new')
+soup = BeautifulSoup(page.content, 'html.parser')
 
 
 
