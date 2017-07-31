@@ -7,4 +7,7 @@ This is a script that gets the status of a surveda and sends out an email summar
 2. Run `pip install -r requirements.txt` to install dependencies
 3. Run the script `python monitor.py -project 25 - survey 123`
 
-The email template is for you to copy and paste into the email service (we're using sparkpost here). With Sparkpost you'll need to specify the API key and template id in your environment variables.
+## Other Notes
+* The email template is for you to copy and paste into the email service (we're using sparkpost here). With Sparkpost you'll need to specify the API key and template id in your environment variables.
+* This has been designed to be run as a scheduled job somewhere (i.e. cron). Here is 
+`0 5 * * * python3 /opt/monitor.py -project 25 - survey 123`
