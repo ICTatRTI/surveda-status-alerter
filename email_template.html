@@ -37,35 +37,49 @@ a{color:#37aadc}
         <table align="center" border="0" cellpadding="0" cellspacing="0" width="85%">
           <tbody>
           <tr>
-          <td align="">
+          <td style="font-size:14px;font-family: Arial,Helvetica Neue,Helvetica,sans-serif; ">
 
               Hello,
               <p>
-              Here is your daily update for the <strong>{{survey_name}} </strong>.
+              Here is your daily update forthe <strong>{{survey_name}}</strong>.
               </p>
 
-              <p>
-               <span style="text-decoration: underline;"{{channel_one_name}}:</span><br/>
-              Number of calls/messages sent yesterday: {{channel_one_yesterday}}<br/>
-              Total number of calls /messages sent for this survey: {{channel_one_total}} <br/>
-              </p>
+              <style>
+              #main th {
+                    padding-top: 11px;
+                    padding-bottom: 11px;
+                    background-color: #4CAF50;
+                    color: white;
+                }
+              </style>
+
+              <table id="main" border="0" cellpadding="5" cellspacing="5" class="main_table" width="400">
+                <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Channel Name</th>
+                    <th>Interaction Count</th>
+                </tr>
+                </thead>
+                <tbody>
+              {{each channels}}
+                <tr>
+                 <td>
+                    {{loop_var.date}}
+                </td>
+                <td>
+                    {{loop_var.name}}
+                </td>
+                <td>
+                    {{loop_var.count}}
+                </td>
+                </tr>
+               {{end}}
+
+              </tbody>
+              </table>
 
 
-             {{ if channel_two_name }}
-            Your name is {{name}}
-
-
-             <p>
-             {{channel_two_name}}:<br/>
-              Number of calls/messages sent yesterday: {{channel_two_yesterday}}<br/>
-              Total number of calls /messages sent for this survey: {{channel_two_total}} <br/>
-              </p>
-
-                {{end}}
-                <p>
-                <br/><br/>
-                -Staff Robot
-                </p>
           </td>
           </tr>
           </tbody>
@@ -73,9 +87,19 @@ a{color:#37aadc}
       </td>
       </tr>
       <!--  B O D Y R O W  E N D  -->
-      <tr><td style="font-size:13px;line-height:13px;margin:0;padding:0;">&nbsp;</td></tr>
-      <!--  F O O T E R R O W  S T A R T  -->
+      <tr><td style="font-size:13px;line-height:13px;margin:0;padding:0;font-family: Arial,Helvetica Neue,Helvetica,sans-serif;">
 
+      </td></tr>
+      <!--  F O O T E R R O W  S T A R T  -->
+   <tr><td>
+
+      <div style="text-align:center;margin-top:20px">
+        <hr/>
+        <em>
+            This email was sent to you from the Surveda Survey Monitor. If you don't want to be on this list, send an email to apreston@rti.org
+        </em>
+        </div>
+       </td></tr>
       <!--  F O O T E R R O W  E N D  -->
       </tbody>
     </table>
