@@ -97,7 +97,7 @@ template = sp.templates.get(os.environ.get("SPARKPOST_TEMPLATE_ID"))
 
 # Send email
 sp.transmissions.send(
-    recipients=['apreston@rti.org'],
+    recipients=EMAIL_LIST,
     html=template['content']['html'],
     from_email='ncd-alerts@ictedge.org',
     subject='Daily update for '+survey_name,
