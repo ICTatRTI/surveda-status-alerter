@@ -99,7 +99,7 @@ template = sp.templates.get(os.environ.get("SPARKPOST_TEMPLATE_ID"))
 sp.transmissions.send(
     recipients=EMAIL_LIST,
     html=template['content']['html'],
-    from_email='ncd-alerts@ictedge.org',
+    from_email='NCD Survey Alerts <ncd-alerts@ictedge.org>',
     subject='Daily update for '+survey_name,
     substitution_data={
         'survey_name': survey_name,
