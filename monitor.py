@@ -80,7 +80,7 @@ survey_name = survey.json()['data']['name']
 
 # Get Interactions
 logging.debug('Getting Interactions File ')
-r = s.get(SURVEDA_URL+'/api/v1/projects/'+SURVEDA_PROJECT+'/surveys/'+SURVEDA_SURVEY+'/respondents/interactions_csv')
+r = s.get(SURVEDA_URL+'/api/v1/projects/'+SURVEDA_PROJECT+'/surveys/'+SURVEDA_SURVEY+'/respondents/interactions?_format=csv')
 interactions=pd.read_csv(io.StringIO(r.content.decode('utf-8')))
 
 # Prepare data for notification
