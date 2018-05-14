@@ -80,8 +80,34 @@ survey_name = survey.json()['data']['name']
 
 # Get Interactions
 logging.debug('Getting Interactions File ')
-r = s.get(SURVEDA_URL+'/api/v1/projects/'+SURVEDA_PROJECT+'/surveys/'+SURVEDA_SURVEY+'/respondents/interactions?_format=csv')
-interactions=pd.read_csv(io.StringIO(r.content.decode('utf-8')))
+
+
+def emailerror(survey_name):
+    sp = SparkPost(os.environ.get("SPARKPOST_KEY"))
+    template = sp.templates.get(os.environ.get("SPARKPOST_TEMPLATE_ERROR_ID"))
+
+    message = "There was a problem downloading the interactions file "
+
+    # Send email
+    sp.transmissions.send(
+        recipients=EMAIL_LIST,
+        html=template['content']['html'],
+        from_email='NCD Survey Alerts <ncd-alerts@ictedge.org>',
+        subject='Daily update for ' + survey_name,
+        substitution_data={
+            'survey_name': survey_name,
+            'message': message
+        }
+    )
+
+
+try:
+    r = s.get(SURVEDA_URL+'/api/v1/projects/'+SURVEDA_PROJECT+'/surveys/'+SURVEDA_SURVEY+'/respondents/interactions?_format=csv')
+    interactions=pd.read_csv(io.StringIO(r.content.decode('utf-8')))
+except requests.exceptions.RequestException as e:  # This is the correct syntax
+    print(e)
+    emailerror( survey_name )
+    sys.exit(1)
 
 # Prepare data for notification
 logging.debug('Transformign results ')
@@ -126,3 +152,5 @@ sp.transmissions.send(
 #########################
 
 s.delete(SURVEDA_URL+'/api/v1/sessions')
+
+
