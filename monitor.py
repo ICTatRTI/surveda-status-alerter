@@ -11,6 +11,24 @@ from dotenv import load_dotenv
 
 import logging
 
+def emailerror(survey_name):
+    sp = SparkPost(os.environ.get("SPARKPOST_KEY"))
+    template = sp.templates.get(os.environ.get("SPARKPOST_TEMPLATE_ERROR_ID"))
+
+    message = "There was a problem downloading the interactions file "
+
+    # Send email
+    sp.transmissions.send(
+        recipients=EMAIL_LIST,
+        html=template['content']['html'],
+        from_email='NCD Survey Alerts <ncd-alerts@ictedge.org>',
+        subject='Daily update for ' + survey_name,
+        substitution_data={
+            'survey_name': survey_name,
+            'message': message
+        }
+    )
+
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s %(levelname)-8s %(message)s',
                     datefmt='%a, %d %b %Y %H:%M:%S',
@@ -23,7 +41,6 @@ load_dotenv(dotenv_path)
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-p", "--project", type=int, help="this is the project id")
-parser.add_argument("-s", "--survey", type=int, help="this is the survey id")
 args = parser.parse_args()
 
 if len(sys.argv) < 2:
@@ -34,7 +51,6 @@ if len(sys.argv) < 2:
 SURVEDA_URL = os.environ.get("SURVEDA_URL")
 EMAIL_LIST = str(os.environ.get("SURVEDA_EMAIL_LIST")).split()
 SURVEDA_PROJECT = str(args.project)
-SURVEDA_SURVEY = str(args.survey)
 
 # Get the login token
 logging.debug('Starting...')
@@ -42,6 +58,10 @@ page = requests.get(SURVEDA_URL+'/sessions/new')
 soup = BeautifulSoup(page.content, 'html.parser')
 csrf_token = soup.find("input", {"name":"_csrf_token"})['value'] # soup.find("a", id="link3")
 ask_key = page.cookies['_ask_key']
+
+# Get the mailing stuff ready to go
+sp = SparkPost(os.environ.get("SPARKPOST_KEY"))
+template = sp.templates.get(os.environ.get("SPARKPOST_TEMPLATE_ID"))
 
 
 #########################
@@ -72,80 +92,101 @@ s.headers.update(headers)
 # Get Data
 #########################
 
+logging.debug( 'Getting All Running Surveys ')
 
-# Get Survey Name
-logging.debug( 'Getting Survey '+ SURVEDA_SURVEY)
-survey = s.get(SURVEDA_URL+'/api/v1/projects/'+SURVEDA_PROJECT+'/surveys/'+SURVEDA_SURVEY)
-survey_name = survey.json()['data']['name']
-
-# Get Interactions
-logging.debug('Getting Interactions File ')
-
-
-def emailerror(survey_name):
-    sp = SparkPost(os.environ.get("SPARKPOST_KEY"))
-    template = sp.templates.get(os.environ.get("SPARKPOST_TEMPLATE_ERROR_ID"))
-
-    message = "There was a problem downloading the interactions file "
-
-    # Send email
-    sp.transmissions.send(
-        recipients=EMAIL_LIST,
-        html=template['content']['html'],
-        from_email='NCD Survey Alerts <ncd-alerts@ictedge.org>',
-        subject='Daily update for ' + survey_name,
-        substitution_data={
-            'survey_name': survey_name,
-            'message': message
-        }
-    )
-
-
+# Get all runnign surveys
 try:
-    r = s.get(SURVEDA_URL+'/api/v1/projects/'+SURVEDA_PROJECT+'/surveys/'+SURVEDA_SURVEY+'/respondents/interactions?_format=csv')
-    interactions=pd.read_csv(io.StringIO(r.content.decode('utf-8')))
+    r = s.get(
+        SURVEDA_URL + '/api/v1/projects/' + SURVEDA_PROJECT + '/surveys/')
+    all_surveys = r.json()['data']
+
+    for survey in all_surveys:
+
+        if survey['state'] == 'running':
+            logging.debug("I am a runnign survey")
+
+            # Get Survey Name
+            # logging.debug( 'Getting Survey '+ SURVEDA_SURVEY)
+            # https://surveda-ph.org/api/v1/projects/1/surveys/262/respondents/stats
+            survey_details = s.get(SURVEDA_URL+'/api/v1/projects/'+SURVEDA_PROJECT+'/surveys/'+str(survey['id'])+'/respondents/stats')
+            survey_dispositions = survey_details.json()['data']['respondents_by_disposition']
+
+            logging.debug("Here is queued count: " + str(survey_dispositions['uncontacted']['detail']['queued']['count']))
+
+            logging.debug('Sending Email Notification ')
+
+            total_count = survey_dispositions['responsive']['detail']['completed']['count'] \
+                          + survey_dispositions['contacted']['detail']['contacted']['count']\
+                          + survey_dispositions['responsive']['detail']['ineligible']['count']\
+                          + survey_dispositions['responsive']['detail']['partial']['count']\
+                          + survey_dispositions['uncontacted']['detail']['queued']['count']\
+                          + survey_dispositions['responsive']['detail']['refused']['count']\
+                          + survey_dispositions['uncontacted']['detail']['registered']['count']\
+                          + survey_dispositions['responsive']['detail']['started']['count']
+
+            total_pct = survey_dispositions['responsive']['detail']['completed']['percent'] \
+                        + survey_dispositions['contacted']['detail']['contacted']['percent'] \
+                        + survey_dispositions['responsive']['detail']['ineligible']['percent'] \
+                        + survey_dispositions['responsive']['detail']['partial']['percent'] \
+                        + survey_dispositions['uncontacted']['detail']['queued']['percent'] \
+                        + survey_dispositions['responsive']['detail']['refused']['percent'] \
+                        + survey_dispositions['uncontacted']['detail']['registered']['percent'] \
+                        + survey_dispositions['responsive']['detail']['started']['percent']
+
+
+
+            sp.transmissions.send(
+                recipients=EMAIL_LIST,
+                html=template['content']['html'],
+                from_email='NCD Survey Alerts <ncd-alerts@ictedge.org>',
+                subject='Daily Snapshot for '+ survey['name'],
+                substitution_data={
+                    'survey_name': survey['name'],
+                    'completed': survey_dispositions['responsive']['detail']['completed']['count'],
+                    'completed_pct': round(survey_dispositions['responsive']['detail']['completed']['percent'],2),
+                    'completed_new': '--',
+                    'contacted': survey_dispositions['contacted']['detail']['contacted']['count'],
+                    'contacted_pct': round(survey_dispositions['contacted']['detail']['contacted']['percent'],2),
+                    'contacted_new': '---',
+                    'ineligible': survey_dispositions['responsive']['detail']['ineligible']['count'],
+                    'ineligible_pct': round(survey_dispositions['responsive']['detail']['ineligible']['percent'],2),
+                    'ineligible_new': '---',
+                    'interim_partial': survey_dispositions['responsive']['detail']['partial']['count'],
+                    'interim_partial_pct': round(survey_dispositions['responsive']['detail']['partial']['percent'],2),
+                    'interim_partial_new': '--',
+                    'queued': survey_dispositions['uncontacted']['detail']['queued']['count'],
+                    'queued_pct': round(survey_dispositions['uncontacted']['detail']['queued']['percent'],2),
+                    'queued_new': '--',
+                    'refused': survey_dispositions['responsive']['detail']['refused']['count'],
+                    'refused_pct': round(survey_dispositions['responsive']['detail']['refused']['percent'],2),
+                    'refused_new': '--',
+                    'registered': survey_dispositions['uncontacted']['detail']['registered']['count'],
+                    'registered_pct': round(survey_dispositions['uncontacted']['detail']['registered']['percent'],2),
+                    'registered_new': '--',
+                    'started': survey_dispositions['responsive']['detail']['started']['count'],
+                    'started_pct': round(survey_dispositions['responsive']['detail']['started']['percent'],2),
+                    'started_new': '--',
+                    'total_count': total_count,
+                    'total_pct' : round(total_pct,2)
+                }
+            )
+
+
 except requests.exceptions.RequestException as e:  # This is the correct syntax
     print(e)
-    emailerror( survey_name )
     sys.exit(1)
 
-# Prepare data for notification
-logging.debug('Transformign results ')
-interactions['Timestamp'] = pd.to_datetime(interactions['Timestamp']);
-interactions = interactions.set_index('Timestamp')
-timegrouped = interactions.groupby([pd.TimeGrouper('1D'), 'Channel'])
-dataframe = timegrouped['Respondent ID'].count().to_frame()
-dataframe = dataframe.reset_index()
 
-channel_data = []
-for index, row in dataframe.iterrows():
-    channel = {}
-    channel['date'] = row["Timestamp"].strftime("%Y-%m-%d")
-    channel['name'] = row["Channel"]
-    channel['count'] = row["Respondent ID"]
-    channel_data.append(channel)
 
 
 
 #########################
 # Send Email notification
 #########################
-logging.debug('Sending Email Notification ')
-sp = SparkPost(os.environ.get("SPARKPOST_KEY"))
-template = sp.templates.get(os.environ.get("SPARKPOST_TEMPLATE_ID"))
 
 
+channels = []
 # Send email
-sp.transmissions.send(
-    recipients=EMAIL_LIST,
-    html=template['content']['html'],
-    from_email='NCD Survey Alerts <ncd-alerts@ictedge.org>',
-    subject='Daily update for '+survey_name,
-    substitution_data={
-        'survey_name': survey_name,
-        'channels': channel_data
-    }
-)
 
 #########################
 # Logoff
