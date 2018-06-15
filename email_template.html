@@ -1,118 +1,234 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+<!-- If you delete this meta tag, Half Life 3 will never be released. -->
+<meta name="viewport" content="width=device-width">
+
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My First Email</title>
-<style type="text/css">
-@media(max-width:480px){
-  table[class=main_table],table[class=layout_table]{width:300px !important;}
-  table[class=layout_table] tbody tr td.header_image img{width:300px !important;height:auto !important;}
-}
-a{color:#37aadc}
-</style>
+<title>Surveda Snapshot</title>
+
+<style type="text/css">@media only screen and (max-width: 600px) {
+    a[class="btn"] {
+        display: block;
+        margin-bottom: 10px;
+        background-image: none;
+        margin-right: 0
+        }
+    div[class="column"] {
+        width: auto;
+        float: none
+        }
+    table.social div[class="column"] {
+        width: auto
+        }
+    }
+    #information {
+      font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 18px;
+    }
+
+    #information td, #information th {
+        border: 1px solid #ddd;
+        padding: 4px;
+    }
+
+    #information tr:nth-child(even){background-color: #f2f2f2;}
+
+    #information tr:hover {background-color: #ddd;}
+
+    #information th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: #BDBFBD;
+        color: white;
+        font-weight: bold;
+    }
+
+    .emphasis {
+      font-weight: bold;
+    }
+
+    .survey_name {
+      font-style: italic;
+    }
+
+    </style>
+
+
 </head>
-<body>
-<table border="0" cellpadding="0" cellspacing="0" width="100%">
-<tbody>
-<tr>
-<td align="center" valign="top">
-<!--  M A I N T A B L E  S T A R T  -->
-<table border="0" cellpadding="0" cellspacing="0" class="main_table" width="600">
-    <tbody>
-    <tr>
-    <td>
-      <!--  L A Y O U T _ T A B L E  S T A R T  -->
-    <table border="0" cellpadding="0" cellspacing="0" class="layout_table" style="border-collapse:collapse;border:1px solid #CCCCCC;" width="100%" >
-      <tbody>
-      <!--  H E A D E R R O W  S T A R T  -->
-      <tr>
-      <td align="left" class="header_image"><img height="120" src="https://dl.dropboxusercontent.com/s/i5p1ig0nt189k1b/header-generic-600x120.png width="600" style="border:0;display:block;"></td>
-      </tr>
-      <!--  H E A D E R R O W  E N D  -->
-      <tr><td style="font-size:14px;line-height:14px;margin:0;padding:0;">&nbsp;</td></tr>
-      <!--  B O D Y R O W  S T A R T  -->
-      <tr>
-      <td align="center" valign="top">
-        <table align="center" border="0" cellpadding="0" cellspacing="0" width="85%">
-          <tbody>
-          <tr>
-          <td style="font-size:14px;font-family: Arial,Helvetica Neue,Helvetica,sans-serif; ">
 
-              Hello,
-              <p>
-              Here is your daily update forthe <strong>{{survey_name}}</strong>.
-              </p>
+<body bgcolor="#FFFFFF" style="-webkit-font-smoothing:antialiased; -webkit-text-size-adjust:none; font-family:Tahoma, Geneva, sans-serif; height:100%; width:100% font-size:21px; font-weight:normal; line-height:1.6; margin-bottom:10px" height="100%" width="100%">
 
-              <style>
-              #main th {
-                    padding-top: 11px;
-                    padding-bottom: 11px;
-                    background-color: #4CAF50;
-                    color: white;
-                }
-              </style>
+<!-- HEADER -->
+<table class="head-wrap" style="width:100%" width="100%">
+	<tr>
+		<td></td>
+		<td class="header container" style="clear:both; display:block; margin:0 auto; max-width:600px">
 
-              <table id="main" border="0" cellpadding="5" cellspacing="5" class="main_table" width="400">
-                <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Channel Name</th>
-                    <th>Interaction Count</th>
-                </tr>
-                </thead>
-                <tbody>
-              {{each channels}}
-                <tr>
-                 <td>
-                    {{loop_var.date}}
-                </td>
-                <td>
-                    {{loop_var.name}}
-                </td>
-                <td>
-                    {{loop_var.count}}
-                </td>
-                </tr>
-               {{end}}
+				<div class="content" style="display:block; margin:0 auto; max-width:600px; padding:15px">
+				<table style="width:100%" width="100%">
+					<tr>
+						<td></td>
+						<td align="right"><h6 class="collapse" style='color:#444; font-family:"Tahoma, Geneva, sans-serif"; line-height:1.1; margin-bottom:15px; font-size:14px; font-weight:900; text-transform:uppercase; margin:0; padding:0'></h6></td>
+					</tr>
+				</table>
+				</div>
 
-              </tbody>
-              </table>
-
-
-          </td>
-          </tr>
-          </tbody>
-        </table>
-      </td>
-      </tr>
-      <!--  B O D Y R O W  E N D  -->
-      <tr><td style="font-size:13px;line-height:13px;margin:0;padding:0;font-family: Arial,Helvetica Neue,Helvetica,sans-serif;">
-
-      </td></tr>
-      <!--  F O O T E R R O W  S T A R T  -->
-   <tr><td>
-
-      <div style="text-align:center;margin-top:20px">
-        <hr/>
-        <em>
-            This email was sent to you from the Surveda Survey Monitor. If you don't want to be on this list, send an email to apreston@rti.org
-        </em>
-        </div>
-       </td></tr>
-      <!--  F O O T E R R O W  E N D  -->
-      </tbody>
-    </table>
-    <!--  L A Y O U T _ T A B L E  E N D  -->
-    </td>
-    </tr>
-    </tbody>
+		</td>
+		<td></td>
+	</tr>
 </table>
-<!--  M A I N _ T A B L E  E N D  -->
-</td>
-</tr>
-</tbody>
+<!-- /HEADER -->
+
+
+<!-- BODY -->
+<table class="body-wrap" style="width:100%" width="100%">
+	<tr>
+		<td></td>
+		<td class="container" bgcolor="#FFFFFF" style="clear:both; display:block; margin:0 auto; max-width:600px">
+
+			<div class="content" style="display:block; margin:0 auto; max-width:600px; padding:15px">
+			<table style="width:100%" width="100%">
+			<tr>
+				<td>
+					<p class="greeting" style="font-size:28px; font-weight:normal; line-height:1.6; margin-bottom:10px; font-family:Impact, Charcoal, sans-serif">Hello there,</p>
+
+					<p style="font-size:18px; font-weight:normal; line-height:1.6; margin-bottom:10px">
+
+					Here is your daily snapshot for <span class="survey_name">{{ survey_name }}</span>
+					</p>
+
+					<table id="information">
+		              <tr>
+		                <th>Disposition</th>
+		                 <th>N</th>
+		                <th>%</th>
+		                <th>New since yesterday</th>
+		              </tr>
+		              <tr>
+		                <td>Completed</td>
+		                <td>{{ completed }}</td>
+		                <td>{{ completed_pct }}</td>
+		                <td>{{ completed_new }}</td>
+		              </tr>
+		              <tr>
+		                <td>Contacted</td>
+		                <td>{{ contacted }}</td>
+		                <td>{{ contacted_pct }}</td>
+		                <td>{{ contacted_new }}</td>
+		              </tr>
+		             <tr>
+		                <td>Ineligible</td>
+		                <td>{{ ineligible }}</td>
+		                <td>{{ ineligible_pct }}</td>
+		                <td>{{ ineligible_new }}</td>
+		              </tr>
+		              <tr>
+		                <td>Interim Partial</td>
+		                <td>{{ interim_partial }}</td>
+		                <td>{{ interim_partial_pct }}</td>
+		                <td>{{ interim_partial_new }}</td>
+		              </tr>
+		              <tr>
+		                <td>Queued</td>
+		                <td>{{ queued }}</td>
+		                <td>{{ queued_pct }}</td>
+		                <td>{{ queued_new }}</td>
+		              </tr>
+		              <tr>
+		                <td>Refused</td>
+		                <td>{{ refused }}</td>
+		                <td>{{ refused_pct }}</td>
+		                <td>{{ refused_new }}</td>
+		              </tr>
+		              <tr>
+		                <td>Registered</td>
+		                <td>{{ registered }}</td>
+		                <td>{{ registered_pct }}</td>
+		                <td>{{ registered_new }}</td>
+		              </tr>
+		              <tr>
+		                <td>Started</td>
+		                <td>{{ started }}</td>
+		                <td>{{ started_pct }}</td>
+		                <td>{{ started_new }}</td>
+		              </tr>
+		              <tr>
+		                <td><span class="emphasis">Total</span></td>
+		                <td><span class="emphasis">{{ total_count }}</span></td>
+		                <td><span class="emphasis">{{ total_pct }}</span</td>
+		                <td></td>
+		              </tr>
+		            </table>
+
+
+						<p style="font-size:21px; font-weight:normal; line-height:1.6; margin-bottom:10px">
+
+
+						</p>
+						<!-- Callout Panel -->
+						<!-- /Callout Panel -->
+
+						<!-- social & contact -->
+						<table class="social" width="100%" style="background-color:#FFFFFF; width:100%" bgcolor="#ebebeb">
+							<tr>
+								<td>
+
+
+									<!-- column 2 -->
+									<table style="width:100%" width="100%">
+										<tr>
+											<td>
+											</td>
+										</tr>
+									</table>
+<!-- /column 2 -->
+
+									<span class="clear" style="clear:both; display:block"></span>
+
+								</td>
+							</tr>
+						</table>
+<!-- /social & contact -->
+
+					</td>
+				</tr>
+			</table>
+			</div>
+<!-- /content -->
+
+		</td>
+		<td></td>
+	</tr>
 </table>
+<!-- /BODY -->
+
+<!-- FOOTER -->
+<table class="footer-wrap" style="width:100%; clear:both" width="100%">
+	<tr>
+		<td></td>
+		<td class="container" style="clear:both; display:block; margin:0 auto; max-width:600px">
+
+				<!-- content -->
+				<div class="content" style="display:block; margin:0 auto; max-width:600px; padding:15px">
+				<table style="width:100%" width="100%">
+				<tr>
+					<td style="text-align: right;">
+						<img src="https://surveda.instedd.org/images/header_icon_default-ecd3634f452927fe1c65854a6926913d.svg?vsn=d" style="width:200px; vertical-align:middle" valign="middle">
+					</td>
+				</tr>
+			</table>
+				</div>
+<!-- /content -->
+
+		</td>
+		<td></td>
+	</tr>
+</table>
+<!-- /FOOTER -->
+
 </body>
 </html>
-
