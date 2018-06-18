@@ -94,12 +94,13 @@
 			<table style="width:100%" width="100%">
 			<tr>
 				<td>
-					<p class="greeting" style="font-size:28px; font-weight:normal; line-height:1.6; margin-bottom:10px; font-family:Impact, Charcoal, sans-serif">Hello there,</p>
 
 					<p style="font-size:18px; font-weight:normal; line-height:1.6; margin-bottom:10px">
 
 					Here is your daily snapshot for <span class="survey_name">{{ survey_name }}</span>
 					</p>
+
+					<h2>By Disposition</h2>
 
 					<table id="information">
 		              <tr>
@@ -165,10 +166,32 @@
 		            </table>
 
 
-						<p style="font-size:21px; font-weight:normal; line-height:1.6; margin-bottom:10px">
+					{{if strata}}
 
 
-						</p>
+					<h2>By Strata</h2>
+
+					<table id="information">
+		              <tr>
+		                <th>Strata</th>
+						  <th>Target</th>
+		                <th>Complete</th>
+		                <th>Partial</th>
+					  </tr>
+
+						{{each strata}}
+		                 <tr>
+
+        					 <td> {{{loop_var.name}}} </td>
+							<td> {{{loop_var.target}}} </td>
+							<td> {{{loop_var.complete}}} </td>
+							<td> {{{loop_var.partial}}} </td>
+					     </tr>
+						{{ end }}
+
+					</table>
+
+					{{end}}
 						<!-- Callout Panel -->
 						<!-- /Callout Panel -->
 

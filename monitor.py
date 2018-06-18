@@ -12,6 +12,8 @@ import json
 
 import logging
 
+
+
 def emailerror(survey_name):
     sp = SparkPost(os.environ.get("SPARKPOST_KEY"))
     template = sp.templates.get(os.environ.get("SPARKPOST_TEMPLATE_ERROR_ID"))
@@ -30,6 +32,8 @@ def emailerror(survey_name):
             'message': message
         }
     )
+
+
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s %(levelname)-8s %(message)s',
@@ -108,11 +112,11 @@ try:
             logging.debug("I am a runnign survey")
 
             # Get Survey Name
-            # logging.debug( 'Getting Survey '+ SURVEDA_SURVEY)
-            # https://surveda-ph.org/api/v1/projects/1/surveys/262/respondents/stats
+            logging.debug( 'Getting Survey '+ survey['name'] + '(survey id: '+ str(survey['id']) +')')
+
             survey_details = s.get(SURVEDA_URL+'/api/v1/projects/'+SURVEDA_PROJECT+'/surveys/'+str(survey['id'])+'/respondents/stats')
 
-
+            # Get respondent by dispositions
             survey_dispositions = survey_details.json()['data']['respondents_by_disposition']
 
             logging.debug('Loading up previous runs activity ')
@@ -147,7 +151,7 @@ try:
                                   previous_survey_dispositions['responsive']['detail']['started']['count']
 
             except IOError as e:
-                logging.debug("previous run snapshot not availble.")
+                logging.debug("previous run snapshot not available.")
 
                 completed_new = "--"
                 contacted_new = "--"
@@ -157,7 +161,6 @@ try:
                 refused_new = "--"
                 registered_new = "--"
                 started_new = "--"
-
 
             total_count = survey_dispositions['responsive']['detail']['completed']['count'] \
                           + survey_dispositions['contacted']['detail']['contacted']['count'] \
@@ -178,7 +181,39 @@ try:
                         + survey_dispositions['responsive']['detail']['started']['percent']
 
 
+            # Get strata names
+            references = survey_details.json()['data']['reference']
+
+            # Get quota targets (this is harder than it needs to be)
+            survey_configuration = s.get(
+                SURVEDA_URL + '/api/v1/projects/' + SURVEDA_PROJECT + '/surveys/' + str(survey['id']) )
+            buckets = survey_configuration.json()['data']['quotas']['buckets']
+
+            for reference in references:
+
+                target = 0
+                partials = 0
+                complete = 0
+
+                logging.debug('Getting reference for '+ str(reference['id']))
+
+                # this can be added when https://github.com/instedd/ask/pull/1420 is merged
+                reference['target'] = "--"
+
+                if str(reference['id']) in survey_dispositions['responsive']['detail']['completed']['by_reference']:
+                    complete = survey_dispositions['responsive']['detail']['completed']['by_reference'][str(reference['id'])]
+                reference['complete'] = complete
+
+                if str(reference['id']) in survey_dispositions['responsive']['detail']['partial']['by_reference']:
+                    partials = survey_dispositions['responsive']['detail']['partial']['by_reference'][str(reference['id'])]
+                reference['partial'] = partials
+
             logging.debug('Sending Email Notification ')
+
+
+            #########################
+            # Send Email notification
+            #########################
 
             sp.transmissions.send(
                 recipients=EMAIL_LIST,
@@ -187,6 +222,8 @@ try:
                 subject='Daily Snapshot for '+ survey['name'],
                 substitution_data={
                     'survey_name': survey['name'],
+
+                    # By Disposition
                     'completed': survey_dispositions['responsive']['detail']['completed']['count'],
                     'completed_pct': round(survey_dispositions['responsive']['detail']['completed']['percent'],2),
                     'completed_new': completed_new,
@@ -212,7 +249,10 @@ try:
                     'started_pct': round(survey_dispositions['responsive']['detail']['started']['percent'],2),
                     'started_new': started_new,
                     'total_count': total_count,
-                    'total_pct' : round(total_pct,2)
+                    'total_pct' : round(total_pct,2),
+
+                     # By Strata
+                    "strata": references
                 }
             )
 
@@ -222,19 +262,10 @@ try:
 
 
 
-
-
 except requests.exceptions.RequestException as e:
     logging.debug(e)
     sys.exit(1)
 
-
-
-
-
-#########################
-# Send Email notification
-#########################
 
 
 #########################
@@ -242,5 +273,4 @@ except requests.exceptions.RequestException as e:
 #########################
 
 s.delete(SURVEDA_URL+'/api/v1/sessions')
-
 
