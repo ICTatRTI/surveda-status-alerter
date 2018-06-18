@@ -14,5 +14,4 @@ This is a script that gets the status of a [Surveda](https://github.com/instedd/
 
 ### Example Output
 
-[screenshot](example.png)
-
+![screenshot](example.png)
