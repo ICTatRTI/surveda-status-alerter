@@ -8,6 +8,7 @@ import io
 from sparkpost import SparkPost
 from os.path import join, dirname
 from dotenv import load_dotenv
+import json
 
 import logging
 
@@ -109,19 +110,61 @@ try:
             # logging.debug( 'Getting Survey '+ SURVEDA_SURVEY)
             # https://surveda-ph.org/api/v1/projects/1/surveys/262/respondents/stats
             survey_details = s.get(SURVEDA_URL+'/api/v1/projects/'+SURVEDA_PROJECT+'/surveys/'+str(survey['id'])+'/respondents/stats')
+
+
             survey_dispositions = survey_details.json()['data']['respondents_by_disposition']
 
-            logging.debug("Here is queued count: " + str(survey_dispositions['uncontacted']['detail']['queued']['count']))
+            logging.debug('Loading up previous runs activity ')
 
-            logging.debug('Sending Email Notification ')
+            try:
+                with open('previous-' + str(survey['id']) + '.json') as json_file:
+
+                    previous_survey_dispositions = json.load(json_file)['data']['respondents_by_disposition']
+
+                    completed_new = survey_dispositions['responsive']['detail']['completed']['count'] \
+                                    - previous_survey_dispositions['responsive']['detail']['completed']['count']
+
+                    contacted_new = survey_dispositions['contacted']['detail']['contacted']['count'] - \
+                                    previous_survey_dispositions['contacted']['detail']['contacted']['count']
+
+                    ineligible_new = survey_dispositions['responsive']['detail']['ineligible']['count'] - \
+                                     previous_survey_dispositions['responsive']['detail']['ineligible']['count']
+
+                    interim_partial_new = survey_dispositions['responsive']['detail']['partial']['count'] - \
+                                          previous_survey_dispositions['responsive']['detail']['partial']['count']
+
+                    queued_new = survey_dispositions['uncontacted']['detail']['queued']['count'] - \
+                                 previous_survey_dispositions['uncontacted']['detail']['queued']['count']
+
+                    refused_new = survey_dispositions['responsive']['detail']['refused']['count'] - \
+                                  previous_survey_dispositions['responsive']['detail']['refused']['count']
+
+                    registered_new = survey_dispositions['uncontacted']['detail']['registered']['count'] - \
+                                     previous_survey_dispositions['uncontacted']['detail']['registered']['count']
+
+                    started_new = survey_dispositions['responsive']['detail']['started']['count'] - \
+                                  previous_survey_dispositions['responsive']['detail']['started']['count']
+
+            except IOError as e:
+                logging.debug("previous run snapshot not availble.")
+
+                completed_new = "--"
+                contacted_new = "--"
+                ineligible_new = "--"
+                interim_partial_new = "--"
+                queued_new = "--"
+                refused_new = "--"
+                registered_new = "--"
+                started_new = "--"
+
 
             total_count = survey_dispositions['responsive']['detail']['completed']['count'] \
-                          + survey_dispositions['contacted']['detail']['contacted']['count']\
-                          + survey_dispositions['responsive']['detail']['ineligible']['count']\
-                          + survey_dispositions['responsive']['detail']['partial']['count']\
-                          + survey_dispositions['uncontacted']['detail']['queued']['count']\
-                          + survey_dispositions['responsive']['detail']['refused']['count']\
-                          + survey_dispositions['uncontacted']['detail']['registered']['count']\
+                          + survey_dispositions['contacted']['detail']['contacted']['count'] \
+                          + survey_dispositions['responsive']['detail']['ineligible']['count'] \
+                          + survey_dispositions['responsive']['detail']['partial']['count'] \
+                          + survey_dispositions['uncontacted']['detail']['queued']['count'] \
+                          + survey_dispositions['responsive']['detail']['refused']['count'] \
+                          + survey_dispositions['uncontacted']['detail']['registered']['count'] \
                           + survey_dispositions['responsive']['detail']['started']['count']
 
             total_pct = survey_dispositions['responsive']['detail']['completed']['percent'] \
@@ -134,6 +177,7 @@ try:
                         + survey_dispositions['responsive']['detail']['started']['percent']
 
 
+            logging.debug('Sending Email Notification ')
 
             sp.transmissions.send(
                 recipients=EMAIL_LIST,
@@ -144,36 +188,43 @@ try:
                     'survey_name': survey['name'],
                     'completed': survey_dispositions['responsive']['detail']['completed']['count'],
                     'completed_pct': round(survey_dispositions['responsive']['detail']['completed']['percent'],2),
-                    'completed_new': '--',
+                    'completed_new': completed_new,
                     'contacted': survey_dispositions['contacted']['detail']['contacted']['count'],
                     'contacted_pct': round(survey_dispositions['contacted']['detail']['contacted']['percent'],2),
-                    'contacted_new': '---',
+                    'contacted_new': contacted_new,
                     'ineligible': survey_dispositions['responsive']['detail']['ineligible']['count'],
                     'ineligible_pct': round(survey_dispositions['responsive']['detail']['ineligible']['percent'],2),
-                    'ineligible_new': '---',
+                    'ineligible_new': ineligible_new,
                     'interim_partial': survey_dispositions['responsive']['detail']['partial']['count'],
                     'interim_partial_pct': round(survey_dispositions['responsive']['detail']['partial']['percent'],2),
-                    'interim_partial_new': '--',
+                    'interim_partial_new': interim_partial_new,
                     'queued': survey_dispositions['uncontacted']['detail']['queued']['count'],
                     'queued_pct': round(survey_dispositions['uncontacted']['detail']['queued']['percent'],2),
-                    'queued_new': '--',
+                    'queued_new': queued_new,
                     'refused': survey_dispositions['responsive']['detail']['refused']['count'],
                     'refused_pct': round(survey_dispositions['responsive']['detail']['refused']['percent'],2),
-                    'refused_new': '--',
+                    'refused_new': refused_new,
                     'registered': survey_dispositions['uncontacted']['detail']['registered']['count'],
                     'registered_pct': round(survey_dispositions['uncontacted']['detail']['registered']['percent'],2),
-                    'registered_new': '--',
+                    'registered_new': registered_new,
                     'started': survey_dispositions['responsive']['detail']['started']['count'],
                     'started_pct': round(survey_dispositions['responsive']['detail']['started']['percent'],2),
-                    'started_new': '--',
+                    'started_new': started_new,
                     'total_count': total_count,
                     'total_pct' : round(total_pct,2)
                 }
             )
 
+            # save this for later
+            with open('previous-' + str(survey['id']) + '.json', 'w') as outfile:
+                json.dump(survey_details.json(), outfile, indent=4)
 
-except requests.exceptions.RequestException as e:  # This is the correct syntax
-    print(e)
+
+
+
+
+except requests.exceptions.RequestException as e:
+    logging.debug(e)
     sys.exit(1)
 
 
