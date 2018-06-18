@@ -24,6 +24,7 @@ def emailerror(survey_name):
         html=template['content']['html'],
         from_email='NCD Survey Alerts <ncd-alerts@ictedge.org>',
         subject='Daily update for ' + survey_name,
+        campaign='Surveda Alerter',
         substitution_data={
             'survey_name': survey_name,
             'message': message
@@ -235,9 +236,6 @@ except requests.exceptions.RequestException as e:
 # Send Email notification
 #########################
 
-
-channels = []
-# Send email
 
 #########################
 # Logoff
