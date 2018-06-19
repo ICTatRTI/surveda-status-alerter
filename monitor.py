@@ -135,7 +135,7 @@ try:
                     ineligible_new = survey_dispositions['responsive']['detail']['ineligible']['count'] - \
                                      previous_survey_dispositions['responsive']['detail']['ineligible']['count']
 
-                    interim_partial_new = survey_dispositions['responsive']['detail']['partial']['count'] - \
+                    partial_new = survey_dispositions['responsive']['detail']['partial']['count'] - \
                                           previous_survey_dispositions['responsive']['detail']['partial']['count']
 
                     queued_new = survey_dispositions['uncontacted']['detail']['queued']['count'] - \
@@ -159,7 +159,7 @@ try:
                 completed_new = "--"
                 contacted_new = "--"
                 ineligible_new = "--"
-                interim_partial_new = "--"
+                partial_new = "--"
                 queued_new = "--"
                 refused_new = "--"
                 rejected_new = "--"
@@ -240,9 +240,9 @@ try:
                     'ineligible': survey_dispositions['responsive']['detail']['ineligible']['count'],
                     'ineligible_pct': round(survey_dispositions['responsive']['detail']['ineligible']['percent'],2),
                     'ineligible_new': ineligible_new,
-                    'interim_partial': survey_dispositions['responsive']['detail']['partial']['count'],
-                    'interim_partial_pct': round(survey_dispositions['responsive']['detail']['partial']['percent'],2),
-                    'interim_partial_new': interim_partial_new,
+                    'partial': survey_dispositions['responsive']['detail']['partial']['count'],
+                    'partial_pct': round(survey_dispositions['responsive']['detail']['partial']['percent'],2),
+                    'partial_new': partial_new,
                     'queued': survey_dispositions['uncontacted']['detail']['queued']['count'],
                     'queued_pct': round(survey_dispositions['uncontacted']['detail']['queued']['percent'],2),
                     'queued_new': queued_new,
