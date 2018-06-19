@@ -26,7 +26,7 @@ def emailerror(survey_name):
         html=template['content']['html'],
         from_email='NCD Survey Alerts <ncd-alerts@ictedge.org>',
         subject='Daily update for ' + survey_name,
-        campaign='Surveda Alerter',
+        campaign='NCD Survey Alerter',
         substitution_data={
             'survey_name': survey_name,
             'message': message
@@ -144,6 +144,9 @@ try:
                     refused_new = survey_dispositions['responsive']['detail']['refused']['count'] - \
                                   previous_survey_dispositions['responsive']['detail']['refused']['count']
 
+                    rejected_new = survey_dispositions['responsive']['detail']['rejected']['count'] - \
+                                  previous_survey_dispositions['responsive']['detail']['rejected']['count']
+
                     registered_new = survey_dispositions['uncontacted']['detail']['registered']['count'] - \
                                      previous_survey_dispositions['uncontacted']['detail']['registered']['count']
 
@@ -159,6 +162,7 @@ try:
                 interim_partial_new = "--"
                 queued_new = "--"
                 refused_new = "--"
+                rejected_new = "--"
                 registered_new = "--"
                 started_new = "--"
 
@@ -168,6 +172,7 @@ try:
                           + survey_dispositions['responsive']['detail']['partial']['count'] \
                           + survey_dispositions['uncontacted']['detail']['queued']['count'] \
                           + survey_dispositions['responsive']['detail']['refused']['count'] \
+                          + survey_dispositions['responsive']['detail']['rejected']['count'] \
                           + survey_dispositions['uncontacted']['detail']['registered']['count'] \
                           + survey_dispositions['responsive']['detail']['started']['count']
 
@@ -177,6 +182,7 @@ try:
                         + survey_dispositions['responsive']['detail']['partial']['percent'] \
                         + survey_dispositions['uncontacted']['detail']['queued']['percent'] \
                         + survey_dispositions['responsive']['detail']['refused']['percent'] \
+                        + survey_dispositions['responsive']['detail']['rejected']['percent'] \
                         + survey_dispositions['uncontacted']['detail']['registered']['percent'] \
                         + survey_dispositions['responsive']['detail']['started']['percent']
 
@@ -219,6 +225,7 @@ try:
                 recipients=EMAIL_LIST,
                 html=template['content']['html'],
                 from_email='NCD Survey Alerts <ncd-alerts@ictedge.org>',
+                campaign='NCD Survey Alerter',
                 subject='Daily Snapshot for '+ survey['name'],
                 substitution_data={
                     'survey_name': survey['name'],
@@ -242,6 +249,9 @@ try:
                     'refused': survey_dispositions['responsive']['detail']['refused']['count'],
                     'refused_pct': round(survey_dispositions['responsive']['detail']['refused']['percent'],2),
                     'refused_new': refused_new,
+                    'rejected': survey_dispositions['responsive']['detail']['rejected']['count'],
+                    'rejected_pct': round(survey_dispositions['responsive']['detail']['rejected']['percent'], 2),
+                    'rejected_new': rejected_new,
                     'registered': survey_dispositions['uncontacted']['detail']['registered']['count'],
                     'registered_pct': round(survey_dispositions['uncontacted']['detail']['registered']['percent'],2),
                     'registered_new': registered_new,
