@@ -62,6 +62,7 @@
 
 <body bgcolor="#FFFFFF" style="-webkit-font-smoothing:antialiased; -webkit-text-size-adjust:none; font-family:Tahoma, Geneva, sans-serif; height:100%; width:100% font-size:21px; font-weight:normal; line-height:1.6; margin-bottom:10px" height="100%" width="100%">
 
+
 <!-- HEADER -->
 <table class="head-wrap" style="width:100%" width="100%">
 	<tr>
@@ -98,7 +99,7 @@
 
 					<p style="font-size:18px; font-weight:normal; line-height:1.6; margin-bottom:10px">
 
-					Here is your daily snapshot for <span class="survey_name">{{ survey_name }}</span>
+					Here is your daily snapshot for <a href="https://{{ survey_hostname }}/projects/{{ survey_project }}/surveys/{{ survey_id }}">{{ survey_name }}</a>
 					</p>
 
 					<h2>By Disposition</h2>
@@ -164,6 +165,12 @@
 		                <td>{{ started }}</td>
 		                <td>{{ started_pct }}</td>
 		                <td>{{ started_new }}</td>
+		              </tr>
+						<tr>
+		                <td>Breakoff</td>
+		                <td>{{ breakoff }}</td>
+		                <td>{{ breakoff_pct }}</td>
+		                <td>{{ breakoff_new }}</td>
 		              </tr>
 		              <tr>
 		                <td><span class="emphasis">Total</span></td>

@@ -3,12 +3,12 @@ from bs4 import BeautifulSoup
 import argparse
 import sys
 import os
-import pandas as pd
-import io
+
 from sparkpost import SparkPost
 from os.path import join, dirname
 from dotenv import load_dotenv
 import json
+from urllib.parse import urlparse
 
 import logging
 
@@ -55,8 +55,12 @@ if len(sys.argv) < 2:
 
 
 SURVEDA_URL = os.environ.get("SURVEDA_URL")
+SURVEDA_HOSTNAME = urlparse(SURVEDA_URL).hostname
+
 EMAIL_LIST = str(os.environ.get("SURVEDA_EMAIL_LIST")).split()
 SURVEDA_PROJECT = str(args.project)
+
+
 
 # Get the login token
 logging.debug('Starting...')
@@ -153,6 +157,9 @@ try:
                     started_new = survey_dispositions['responsive']['detail']['started']['count'] - \
                                   previous_survey_dispositions['responsive']['detail']['started']['count']
 
+                    breakoff_new = survey_dispositions['responsive']['detail']['breakoff']['count'] - \
+                                  previous_survey_dispositions['responsive']['detail']['breakoff']['count']
+
             except IOError as e:
                 logging.debug("previous run snapshot not available.")
 
@@ -165,6 +172,7 @@ try:
                 rejected_new = "--"
                 registered_new = "--"
                 started_new = "--"
+                breakoff_new ="--"
 
             total_count = survey_dispositions['responsive']['detail']['completed']['count'] \
                           + survey_dispositions['contacted']['detail']['contacted']['count'] \
@@ -174,7 +182,8 @@ try:
                           + survey_dispositions['responsive']['detail']['refused']['count'] \
                           + survey_dispositions['responsive']['detail']['rejected']['count'] \
                           + survey_dispositions['uncontacted']['detail']['registered']['count'] \
-                          + survey_dispositions['responsive']['detail']['started']['count']
+                          + survey_dispositions['responsive']['detail']['started']['count'] \
+                          + survey_dispositions['responsive']['detail']['breakoff']['count']
 
             total_pct = survey_dispositions['responsive']['detail']['completed']['percent'] \
                         + survey_dispositions['contacted']['detail']['contacted']['percent'] \
@@ -184,13 +193,14 @@ try:
                         + survey_dispositions['responsive']['detail']['refused']['percent'] \
                         + survey_dispositions['responsive']['detail']['rejected']['percent'] \
                         + survey_dispositions['uncontacted']['detail']['registered']['percent'] \
-                        + survey_dispositions['responsive']['detail']['started']['percent']
+                        + survey_dispositions['responsive']['detail']['started']['percent'] \
+                        + survey_dispositions['responsive']['detail']['breakoff']['percent']
 
 
             # Get strata names
             references = survey_details.json()['data']['reference']
 
-            # Get quota targets (this is harder than it needs to be)
+            # Get quota targets
             survey_configuration = s.get(
                 SURVEDA_URL + '/api/v1/projects/' + SURVEDA_PROJECT + '/surveys/' + str(survey['id']) )
             buckets = survey_configuration.json()['data']['quotas']['buckets']
@@ -214,12 +224,13 @@ try:
                     partials = survey_dispositions['responsive']['detail']['partial']['by_reference'][str(reference['id'])]
                 reference['partial'] = partials
 
-            logging.debug('Sending Email Notification ')
+            logging.debug('Sending Email Notification about: '+ SURVEDA_URL + '/projects/'+SURVEDA_PROJECT+'/surveys/' + str(survey['id']))
 
 
             #########################
             # Send Email notification
             #########################
+
 
             sp.transmissions.send(
                 recipients=EMAIL_LIST,
@@ -228,6 +239,9 @@ try:
                 campaign='NCD Survey Alerter',
                 subject='Daily Snapshot for '+ survey['name'],
                 substitution_data={
+                    'survey_hostname' : SURVEDA_HOSTNAME,
+                    'survey_project': SURVEDA_PROJECT,
+                    'survey_id': survey['id'],
                     'survey_name': survey['name'],
 
                     # By Disposition
@@ -255,6 +269,9 @@ try:
                     'registered': survey_dispositions['uncontacted']['detail']['registered']['count'],
                     'registered_pct': round(survey_dispositions['uncontacted']['detail']['registered']['percent'],2),
                     'registered_new': registered_new,
+                    'breakoff': survey_dispositions['responsive']['detail']['breakoff']['count'],
+                    'breakoff_pct': round(survey_dispositions['responsive']['detail']['breakoff']['percent'], 2),
+                    'breakoff_new': breakoff_new,
                     'started': survey_dispositions['responsive']['detail']['started']['count'],
                     'started_pct': round(survey_dispositions['responsive']['detail']['started']['percent'],2),
                     'started_new': started_new,
