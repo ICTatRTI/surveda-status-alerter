@@ -160,6 +160,12 @@ try:
                     breakoff_new = survey_dispositions['responsive']['detail']['breakoff']['count'] - \
                                   previous_survey_dispositions['responsive']['detail']['breakoff']['count']
 
+                    unresponsive_new = survey_dispositions['contacted']['detail']['unresponsive']['count'] - \
+                                   previous_survey_dispositions['contacted']['detail']['unresponsive']['count']
+
+                    failed_new = survey_dispositions['uncontacted']['detail']['failed']['count'] - \
+                                       previous_survey_dispositions['uncontacted']['detail']['failed']['count']
+
             except IOError as e:
                 logging.debug("previous run snapshot not available.")
 
@@ -173,9 +179,12 @@ try:
                 registered_new = "--"
                 started_new = "--"
                 breakoff_new ="--"
+                unresponsive_new = "--"
+                failed_new = "--"
 
             total_count = survey_dispositions['responsive']['detail']['completed']['count'] \
                           + survey_dispositions['contacted']['detail']['contacted']['count'] \
+                          + survey_dispositions['contacted']['detail']['unresponsive']['count'] \
                           + survey_dispositions['responsive']['detail']['ineligible']['count'] \
                           + survey_dispositions['responsive']['detail']['partial']['count'] \
                           + survey_dispositions['uncontacted']['detail']['queued']['count'] \
@@ -183,10 +192,13 @@ try:
                           + survey_dispositions['responsive']['detail']['rejected']['count'] \
                           + survey_dispositions['uncontacted']['detail']['registered']['count'] \
                           + survey_dispositions['responsive']['detail']['started']['count'] \
-                          + survey_dispositions['responsive']['detail']['breakoff']['count']
+                          + survey_dispositions['responsive']['detail']['breakoff']['count'] \
+                          + survey_dispositions['uncontacted']['detail']['failed']['count']
+
 
             total_pct = survey_dispositions['responsive']['detail']['completed']['percent'] \
                         + survey_dispositions['contacted']['detail']['contacted']['percent'] \
+                        + survey_dispositions['contacted']['detail']['unresponsive']['percent'] \
                         + survey_dispositions['responsive']['detail']['ineligible']['percent'] \
                         + survey_dispositions['responsive']['detail']['partial']['percent'] \
                         + survey_dispositions['uncontacted']['detail']['queued']['percent'] \
@@ -194,7 +206,8 @@ try:
                         + survey_dispositions['responsive']['detail']['rejected']['percent'] \
                         + survey_dispositions['uncontacted']['detail']['registered']['percent'] \
                         + survey_dispositions['responsive']['detail']['started']['percent'] \
-                        + survey_dispositions['responsive']['detail']['breakoff']['percent']
+                        + survey_dispositions['responsive']['detail']['breakoff']['percent'] \
+                        + survey_dispositions['uncontacted']['detail']['failed']['percent']
 
 
             # Get strata names
@@ -251,6 +264,9 @@ try:
                     'contacted': survey_dispositions['contacted']['detail']['contacted']['count'],
                     'contacted_pct': round(survey_dispositions['contacted']['detail']['contacted']['percent'],2),
                     'contacted_new': contacted_new,
+                    'unresponsive': survey_dispositions['contacted']['detail']['unresponsive']['count'],
+                    'unresponsive_pct': round(survey_dispositions['contacted']['detail']['unresponsive']['percent'], 2),
+                    'unresponsive_new': contacted_new,
                     'ineligible': survey_dispositions['responsive']['detail']['ineligible']['count'],
                     'ineligible_pct': round(survey_dispositions['responsive']['detail']['ineligible']['percent'],2),
                     'ineligible_new': ineligible_new,
@@ -275,6 +291,9 @@ try:
                     'started': survey_dispositions['responsive']['detail']['started']['count'],
                     'started_pct': round(survey_dispositions['responsive']['detail']['started']['percent'],2),
                     'started_new': started_new,
+                    'failed': survey_dispositions['uncontacted']['detail']['failed']['count'],
+                    'failed_pct': round(survey_dispositions['uncontacted']['detail']['failed']['percent'], 2),
+                    'failed_new': failed_new,
                     'total_count': total_count,
                     'total_pct' : round(total_pct,2),
 

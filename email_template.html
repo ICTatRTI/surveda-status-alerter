@@ -1,13 +1,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<!-- If you delete this meta tag, Half Life 3 will never be released. -->
-<meta name="viewport" content="width=device-width">
+    <!-- If you delete this meta tag, Half Life 3 will never be released. -->
+    <meta name="viewport" content="width=device-width">
 
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Surveda Snapshot</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Surveda Snapshot</title>
 
-<style type="text/css">@media only screen and (max-width: 600px) {
+    <style type="text/css">@media only screen and (max-width: 600px) {
     a[class="btn"] {
         display: block;
         margin-bottom: 10px;
@@ -41,8 +41,7 @@
     .information th {
         padding-top: 12px;
         padding-bottom: 12px;
-        text-align: left;
-        background-color: #BDBFBD;
+        background-color: #909596;
         color: white;
         font-weight: bold;
     }
@@ -55,6 +54,13 @@
       font-style: italic;
     }
 
+    .section_header {
+    	background-color: #BDBFBD;
+    	height: 20px;
+    	font-weight: bold;
+    	color: white;
+    }
+
     </style>
 
 
@@ -65,209 +71,241 @@
 
 <!-- HEADER -->
 <table class="head-wrap" style="width:100%" width="100%">
-	<tr>
-		<td></td>
-		<td class="header container" style="clear:both; display:block; margin:0 auto; max-width:600px">
+    <tr>
+        <td></td>
+        <td class="header container" style="clear:both; display:block; margin:0 auto; max-width:600px">
 
-				<div class="content" style="display:block; margin:0 auto; max-width:600px; padding:15px">
-				<table style="width:100%" width="100%">
-					<tr>
-						<td></td>
-						<td align="right"><h6 class="collapse" style='color:#444; font-family:"Tahoma, Geneva, sans-serif"; line-height:1.1; margin-bottom:15px; font-size:14px; font-weight:900; text-transform:uppercase; margin:0; padding:0'></h6></td>
-					</tr>
-				</table>
-				</div>
+            <div class="content" style="display:block; margin:0 auto; max-width:600px; padding:15px">
+                <table style="width:100%" width="100%">
+                    <tr>
+                        <td></td>
+                        <td align="right"><h6 class="collapse" style='color:#444; font-family:"Tahoma, Geneva, sans-serif"; line-height:1.1; margin-bottom:15px; font-size:14px; font-weight:900; text-transform:uppercase; margin:0; padding:0'></h6></td>
+                    </tr>
+                </table>
+            </div>
 
-		</td>
-		<td></td>
-	</tr>
+        </td>
+        <td></td>
+    </tr>
 </table>
 <!-- /HEADER -->
 
 
 <!-- BODY -->
 <table class="body-wrap" style="width:100%" width="100%">
-	<tr>
-		<td></td>
-		<td class="container" bgcolor="#FFFFFF" style="clear:both; display:block; margin:0 auto; max-width:600px">
+    <tr>
+        <td></td>
+        <td class="container" bgcolor="#FFFFFF" style="clear:both; display:block; margin:0 auto; max-width:600px">
 
-			<div class="content" style="display:block; margin:0 auto; max-width:600px; padding:15px">
-			<table style="width:100%" width="100%">
-			<tr>
-				<td>
-
-
-					<p style="font-size:18px; font-weight:normal; line-height:1.6; margin-bottom:10px">
-
-					Here is your daily snapshot for <a href="https://{{ survey_hostname }}/projects/{{ survey_project }}/surveys/{{ survey_id }}">{{ survey_name }}</a>
-					</p>
-
-					<h2>By Disposition</h2>
-
-					<table class="information">
-		              <tr>
-		                <th>Disposition</th>
-		                 <th>N</th>
-		                <th>%</th>
-		                <th>New since yesterday</th>
-		              </tr>
-		              <tr>
-		                <td>Completed</td>
-		                <td>{{ completed }}</td>
-		                <td>{{ completed_pct }}</td>
-		                <td>{{ completed_new }}</td>
-		              </tr>
-		              <tr>
-		                <td>Contacted</td>
-		                <td>{{ contacted }}</td>
-		                <td>{{ contacted_pct }}</td>
-		                <td>{{ contacted_new }}</td>
-		              </tr>
-		             <tr>
-		                <td>Ineligible</td>
-		                <td>{{ ineligible }}</td>
-		                <td>{{ ineligible_pct }}</td>
-		                <td>{{ ineligible_new }}</td>
-		              </tr>
-		              <tr>
-		                <td>Partial</td>
-		                <td>{{ partial }}</td>
-		                <td>{{ partial_pct }}</td>
-		                <td>{{ partial_new }}</td>
-		              </tr>
-		              <tr>
-		                <td>Queued</td>
-		                <td>{{ queued }}</td>
-		                <td>{{ queued_pct }}</td>
-		                <td>{{ queued_new }}</td>
-		              </tr>
-		              <tr>
-		                <td>Refused</td>
-		                <td>{{ refused }}</td>
-		                <td>{{ refused_pct }}</td>
-		                <td>{{ refused_new }}</td>
-		              </tr>
-
-						<tr>
-		                <td>Rejected</td>
-		                <td>{{ rejected }}</td>
-		                <td>{{ rejected_pct }}</td>
-		                <td>{{ rejected_new }}</td>
-		              </tr>
-		              <tr>
-		                <td>Registered</td>
-		                <td>{{ registered }}</td>
-		                <td>{{ registered_pct }}</td>
-		                <td>{{ registered_new }}</td>
-		              </tr>
-		              <tr>
-		                <td>Started</td>
-		                <td>{{ started }}</td>
-		                <td>{{ started_pct }}</td>
-		                <td>{{ started_new }}</td>
-		              </tr>
-						<tr>
-		                <td>Breakoff</td>
-		                <td>{{ breakoff }}</td>
-		                <td>{{ breakoff_pct }}</td>
-		                <td>{{ breakoff_new }}</td>
-		              </tr>
-		              <tr>
-		                <td><span class="emphasis">Total</span></td>
-		                <td><span class="emphasis">{{ total_count }}</span></td>
-		                <td><span class="emphasis">{{ total_pct }}</span></td>
-		                <td></td>
-		              </tr>
-		            </table>
+            <div class="content" style="display:block; margin:0 auto; max-width:600px; padding:15px">
+                <table style="width:100%" width="100%">
+                    <tr>
+                        <td>
 
 
-					{{if strata}}
+                            <p style="font-size:18px; font-weight:normal; line-height:1.6; margin-bottom:10px">
+
+                                Here is your daily snapshot for <a href="https://{{ survey_hostname }}/projects/{{ survey_project }}/surveys/{{ survey_id }}">{{ survey_name }}</a>
+                            </p>
+
+                            <h2>By Disposition</h2>
+
+                            <table class="information">
+                                <tr>
+                                    <th>Disposition</th>
+                                    <th>N</th>
+                                    <th>%</th>
+                                    <th>New since yesterday</th>
+                                </tr>
 
 
-					<h2>By Strata</h2>
+                                <tr>
+                                    <td colspan="4" class="section_header">
+                                        Responsive
+                                    </td>
+                                </tr>
+                                 <tr>
+                                    <td>Started</td>
+                                    <td>{{ started }}</td>
+                                    <td>{{ started_pct }}</td>
+                                    <td>{{ started_new }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Rejected</td>
+                                    <td>{{ rejected }}</td>
+                                    <td>{{ rejected_pct }}</td>
+                                    <td>{{ rejected_new }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Refused</td>
+                                    <td>{{ refused }}</td>
+                                    <td>{{ refused_pct }}</td>
+                                    <td>{{ refused_new }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Partial</td>
+                                    <td>{{ partial }}</td>
+                                    <td>{{ partial_pct }}</td>
+                                    <td>{{ partial_new }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Ineligible</td>
+                                    <td>{{ ineligible }}</td>
+                                    <td>{{ ineligible_pct }}</td>
+                                    <td>{{ ineligible_new }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Completed</td>
+                                    <td>{{ completed }}</td>
+                                    <td>{{ completed_pct }}</td>
+                                    <td>{{ completed_new }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Breakoff</td>
+                                    <td>{{ breakoff }}</td>
+                                    <td>{{ breakoff_pct }}</td>
+                                    <td>{{ breakoff_new }}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="section_header">
+                                        Contacted
+                                    </td>
+                                </tr>
 
-					<table class="information">
-		              <tr>
-		                <th>Strata</th>
-						  <th>Target</th>
-		                <th>Complete</th>
-		                <th>Partial</th>
-					  </tr>
+                                <tr>
+                                    <td>Contacted</td>
+                                    <td>{{ contacted }}</td>
+                                    <td>{{ contacted_pct }}</td>
+                                    <td>{{ contacted_new }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Unresponsive</td>
+                                    <td>{{ unresponsive }}</td>
+                                    <td>{{ unresponsive_pct }}</td>
+                                    <td>{{ unresponsive_new }}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="section_header">
+                                        Uncontacted
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Queued</td>
+                                    <td>{{ queued }}</td>
+                                    <td>{{ queued_pct }}</td>
+                                    <td>{{ queued_new }}</td>
+                                </tr>
 
-						{{each strata}}
-		                 <tr>
+                                <tr>
+                                    <td>Registered</td>
+                                    <td>{{ registered }}</td>
+                                    <td>{{ registered_pct }}</td>
+                                    <td>{{ registered_new }}</td>
+                                </tr>
 
-        					 <td> {{{loop_var.name}}} </td>
-							<td> {{{loop_var.target}}} </td>
-							<td> {{{loop_var.complete}}} </td>
-							<td> {{{loop_var.partial}}} </td>
-					     </tr>
-						{{ end }}
+                                <tr>
+                                    <td>Failed</td>
+                                    <td>{{ failed }}</td>
+                                    <td>{{ failed_pct }}</td>
+                                    <td>{{ failed_new }}</td>
+                                </tr>
 
-					</table>
-
-					{{end}}
-						<!-- Callout Panel -->
-						<!-- /Callout Panel -->
-
-						<!-- social & contact -->
-						<table class="social" width="100%" style="background-color:#FFFFFF; width:100%" bgcolor="#ebebeb">
-							<tr>
-								<td>
+                                <tr>
+                                    <td><span class="emphasis">Total</span></td>
+                                    <td><span class="emphasis">{{ total_count }}</span></td>
+                                    <td><span class="emphasis">{{ total_pct }}</span></td>
+                                    <td></td>
+                                </tr>
+                            </table>
 
 
-									<!-- column 2 -->
-									<table style="width:100%" width="100%">
-										<tr>
-											<td>
-											</td>
-										</tr>
-									</table>
-<!-- /column 2 -->
+                            {{if strata}}
 
-									<span class="clear" style="clear:both; display:block"></span>
 
-								</td>
-							</tr>
-						</table>
-<!-- /social & contact -->
+                            <h2>By Strata</h2>
 
-					</td>
-				</tr>
-			</table>
-			</div>
-<!-- /content -->
+                            <table class="information">
+                                <tr>
+                                    <th>Strata</th>
+                                    <th>Target</th>
+                                    <th>Complete</th>
+                                    <th>Partial</th>
+                                </tr>
 
-		</td>
-		<td></td>
-	</tr>
+                                {{each strata}}
+                                <tr>
+
+                                    <td> {{{loop_var.name}}} </td>
+                                    <td> {{{loop_var.target}}} </td>
+                                    <td> {{{loop_var.complete}}} </td>
+                                    <td> {{{loop_var.partial}}} </td>
+                                </tr>
+                                {{ end }}
+
+                            </table>
+
+                            {{end}}
+                            <!-- Callout Panel -->
+                            <!-- /Callout Panel -->
+
+                            <!-- social & contact -->
+                            <table class="social" width="100%" style="background-color:#FFFFFF; width:100%" bgcolor="#ebebeb">
+                                <tr>
+                                    <td>
+
+
+                                        <!-- column 2 -->
+                                        <table style="width:100%" width="100%">
+                                            <tr>
+                                                <td>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <!-- /column 2 -->
+
+                                        <span class="clear" style="clear:both; display:block"></span>
+
+                                    </td>
+                                </tr>
+                            </table>
+                            <!-- /social & contact -->
+
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <!-- /content -->
+
+        </td>
+        <td></td>
+    </tr>
 </table>
 <!-- /BODY -->
 
 <!-- FOOTER -->
 <table class="footer-wrap" style="width:100%; clear:both" width="100%">
-	<tr>
-		<td></td>
-		<td class="container" style="clear:both; display:block; margin:0 auto; max-width:600px">
+    <tr>
+        <td></td>
+        <td class="container" style="clear:both; display:block; margin:0 auto; max-width:600px">
 
-				<!-- content -->
-				<div class="content" style="display:block; margin:0 auto; max-width:600px; padding:15px">
-				<table style="width:100%" width="100%">
-				<tr>
-					<td >
-						<img src="https://surveda.instedd.org/images/header_icon_default-ecd3634f452927fe1c65854a6926913d.svg?vsn=d" style="width:75px; vertical-align:middle" valign="middle">
-					  </td>
-						<td>
-							This email was sent to you from the RTI Surveda Alerter. If you don't want to be on this list, send an email to <a href="mailto:apreston@rti.org">Adam Preston</a>.
-						</td>
-				</tr>
-			</table>
-				</div>
-<!-- /content -->
+            <!-- content -->
+            <div class="content" style="display:block; margin:0 auto; max-width:600px; padding:15px">
+                <table style="width:100%" width="100%">
+                    <tr>
+                        <td >
+                            <img src="https://surveda.instedd.org/images/header_icon_default-ecd3634f452927fe1c65854a6926913d.svg?vsn=d" style="width:75px; vertical-align:middle" valign="middle">
+                        </td>
+                        <td>
+                            This email was sent to you from the RTI Surveda Alerter. If you don't want to be on this list, send an email to <a href="mailto:apreston@rti.org">Adam Preston</a>.
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <!-- /content -->
 
-		</td>
-		<td></td>
-	</tr>
+        </td>
+        <td></td>
+    </tr>
 </table>
 <!-- /FOOTER -->
 
