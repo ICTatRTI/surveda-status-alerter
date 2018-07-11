@@ -266,7 +266,7 @@ try:
                     'contacted_new': contacted_new,
                     'unresponsive': survey_dispositions['contacted']['detail']['unresponsive']['count'],
                     'unresponsive_pct': round(survey_dispositions['contacted']['detail']['unresponsive']['percent'], 2),
-                    'unresponsive_new': contacted_new,
+                    'unresponsive_new': unresponsive_new,
                     'ineligible': survey_dispositions['responsive']['detail']['ineligible']['count'],
                     'ineligible_pct': round(survey_dispositions['responsive']['detail']['ineligible']['percent'],2),
                     'ineligible_new': ineligible_new,
